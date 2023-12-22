@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata: 
+    name: myservice-appset
+    namespace: argocd
+spec:
+    generators:
+    - list:
+        elements:
+            - cluster: my-vcluster
+              url: https://my-vcluster.vcluster-my-vcluster
+    template:
+        metadata:
+            name: '{{cluster}}-nginx'
+        spec:
+            project: default
+            source:
+              repoURL: https://kubernetes.github.io/ingress-nginx # Chart repo URL
+              targetRevision: 4.8.3
+              chart: ingress-nginx
+              helm:
+                releaseName: ingress-nginx
+            syncPolicy:
+                automated:
+                    prune: false
+                    selfHeal: false
+                syncOptions:
+                - CreateNamespace=true
+            destination:
+                server: '{{url}}'
+                namespace: nginx
+            
+

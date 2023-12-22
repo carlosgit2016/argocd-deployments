@@ -1,0 +1,44 @@
+name: worker
+
+image:
+  name: my-worker-example
+  tag: 1.0.0
+
+resources:
+  cpu: 125m
+  memory: 250Mi
+
+livenessProbe:
+    httpGet:
+        port: 80
+        httpHeaders:
+        - name: probe
+          value: liveness
+        path: /healthy
+    terminationGracePeriodSeconds: 2
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+    successThreshold: 1
+
+readinessProbe:
+    httpGet:
+        port: 80
+        httpHeaders:
+        - name: probe
+          value: readiness
+        path: /healthy
+    initialDelaySeconds: 1
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+    successThreshold: 1
+
+hpa:
+  enabled: true
+  maxReplicas: 10
+  minReplicas: 1
+  cpu: 80
+
+service:
+  enabled: true

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: worker
+  name: worker
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: worker
+    spec:
+      containers:
+      - image: my-worker-example:1.0.0
+        name: my-worker-example
+        resources: 
+            requests:
+                cpu: 125m
+                memory: 250Mi
+        ports:
+            - containerPort: 80
+              name: http
+        livenessProbe:
+            httpGet:
+                port: 80
+                httpHeaders:
+                - name: probe
+                  value: liveness
+                path: /healthy
+            terminationGracePeriodSeconds: 2
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+            successThreshold: 1
+        readinessProbe:
+            httpGet:
+                port: 80
+                httpHeaders:
+                - name: probe
+                  value: readiness
+                path: /healthy
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+            successThreshold: 1
