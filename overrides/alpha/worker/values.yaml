@@ -1,0 +1,16 @@
+nameOverride: worker
+
+replicas: 2
+
+configMap:
+  enabled: true
+  data:
+    RABBITMQ_HOST: "rabbitmq.default"
+    RABBITMQ_PORT: "5672"
+    RABBITMQ_VHOST: "/"
+
+hpa:
+  enabled: true
+  maxReplicas: 10
+  minReplicas: 2
+  cpu: 50

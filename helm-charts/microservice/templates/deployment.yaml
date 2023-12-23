@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{- include "microservice.labels" . | nindent 4 }}
+  name: {{- include "microservice.name" . | indent 1 }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      {{- include "microservice.labels.selector" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "microservice.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - image: {{- printf "%s:%s" .Values.image.name .Values.image.tag | indent 1 }}
+        name: {{- include "microservice.name" . | indent 1 }}
+        resources: 
+          {{- toYaml .Values.resources | nindent 10 }}
+        env:
+          {{- range .Values.environmentVariables }}
+            {{- with .}}
+            - name: {{ . | keys | first }}
+              value: {{ . | values | first }}
+            {{- end }}
+          {{- end }}
+        {{- if .Values.configMap.enabled}}
+          {{- if .Values.configMap.propagateToEnv }}
+        envFrom:
+        - configMapRef:
+            name: {{- include "microservice.configMap.name" . | indent 1 }}
+          {{- end }}
+        {{- end }}
+        ports:
+          - containerPort: 80
+            name: http
+        {{- if .Values.probe.enabled }}
+        livenessProbe:
+            {{- toYaml .Values.probe.livenessProbe | nindent 10 }}
+        readinessProbe:
+            {{- toYaml .Values.probe.readinessProbe | nindent 10 }}
+        {{- end}}

@@ -1,14 +1,23 @@
-name: worker
+nameOverride: worker
 
 image:
   name: my-worker-example
-  tag: 1.0.0
+  tag: latest
+
+replicas: 1
 
 resources:
-  cpu: 125m
-  memory: 250Mi
+  requests:
+    cpu: 125m
+    memory: 250Mi
 
-livenessProbe:
+environmentVariables:
+  - FOO: bar
+  - FOOBAR: foobar
+
+probe:
+  enabled: true
+  livenessProbe:
     httpGet:
         port: 80
         httpHeaders:
@@ -20,8 +29,8 @@ livenessProbe:
     timeoutSeconds: 3
     failureThreshold: 3
     successThreshold: 1
-
-readinessProbe:
+  
+  readinessProbe:
     httpGet:
         port: 80
         httpHeaders:
@@ -34,8 +43,14 @@ readinessProbe:
     failureThreshold: 3
     successThreshold: 1
 
-hpa:
+configMap:
   enabled: true
+  propagateToEnv: true
+  data: 
+    DATA: DATA
+
+hpa:
+  enabled: false
   maxReplicas: 10
   minReplicas: 1
   cpu: 80

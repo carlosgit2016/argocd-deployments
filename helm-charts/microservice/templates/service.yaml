@@ -1,0 +1,18 @@
+{{- if .Values.service.enabled }}
+{{- $svcName := printf "%s-svc" (include "microservice.name" .) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "microservice.labels.selector" . | nindent 4 }}
+  name: {{ $svcName }}
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: {{ $svcName }}
+  type: ClusterIP
+{{- end }}

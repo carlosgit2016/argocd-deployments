@@ -1,0 +1,11 @@
+- Create the repository
+- Find a way to emulate multiple clusters
+- Find a way to make the applicationset deploy to one of the vcluster
+  - Got the client/server certificate in .kube/config to populate the cluster secret
+- Create the microservice chart
+- Create the clusters configuration
+- Create the microservice applicationset
+- Decorate the microservice override values
+- Create a diagram to represent the infrastructure
+- Start writing the article
+- Create another certificate to the API Server to used by ArgoCD
