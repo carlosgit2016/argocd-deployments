@@ -11,7 +11,9 @@ spec:
       repoURL: https://github.com/carlosgit2016/argocd-deployments.git
       revision: feat/initial-implementation
       files:
-      - path: "clusters/config/**/config.yaml"
+      - path: "clusters/config/alpha/config.yaml"
+      - path: "clusters/config/beta/config.yaml"
+      - path: "clusters/config/gamma/config.yaml"
   template:
     metadata:
       name: '{{.path.basename}}-worker'

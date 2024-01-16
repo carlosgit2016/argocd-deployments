@@ -18,9 +18,9 @@ spec:
     spec:
       project: default
       sources:
-        - repoURL: https://github.com/bitnami/charts.git
-          targetRevision: main
-          path: bitnami/rabbitmq
+        - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+          targetRevision: feat/initial-implementation
+          path: helm-charts/rabbitmq
           helm:
             releaseName: rabbitmq
             valueFiles:
@@ -30,7 +30,9 @@ spec:
           ref: values
       destination:
         server: '{{.cluster.address}}'
-        namespace: default
+        namespace: rabbitmq
       syncPolicy:
         automated:
-          prune: true
+          prune: false
+        syncOptions:
+        - CreateNamespace=true

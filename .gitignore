@@ -1,0 +1,2 @@
+# Ignore helm-charts dependencies local downloads
+**/*.tgz
