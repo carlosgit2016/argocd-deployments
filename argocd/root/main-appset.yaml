@@ -1,0 +1,30 @@
+## Root application set
+  ## This application set control others in argocd/applicationset
+  ## Useful for new applicationsets and when changes happens to the existent ones
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: root-appset
+  namespace: argocd
+spec:
+  generators:
+  -  list:
+       elements:
+         - cluster: minikube
+           server: https://kubernetes.default.svc
+  template:
+    metadata:
+      name: 'root-{{cluster}}'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+          targetRevision: feat/initial-implementation
+          path: argocd/applicationsets
+      destination:
+        server: '{{server}}'
+        namespace: default
+      syncPolicy:
+        preserveResourcesOnDeletion: true
+        automated:
+          prune: false
