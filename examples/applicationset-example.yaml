@@ -7,8 +7,8 @@ spec:
     generators:
     - list:
         elements:
-            - cluster: my-vcluster
-              url: https://my-vcluster.vcluster-my-vcluster
+            - cluster: vcluster.delta.vcluster-delta.minikube
+              url: https://delta.vcluster-delta
     template:
         metadata:
             name: '{{cluster}}-nginx'

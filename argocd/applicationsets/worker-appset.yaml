@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: worker-appset
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+      revision: feat/initial-implementation
+      files:
+      - path: "clusters/config/alpha/config.yaml"
+      - path: "clusters/config/beta/config.yaml"
+      - path: "clusters/config/gamma/config.yaml"
+  template:
+    metadata:
+      name: '{{.path.basename}}-worker'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+          targetRevision: feat/initial-implementation
+          path: helm-charts/microservice
+          helm:
+            releaseName: worker
+
+            valueFiles:
+            - $values/overrides/{{.path.basename}}/worker/values.yaml
+        - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+          targetRevision: feat/initial-implementation
+          ref: values
+      destination:
+        server: '{{.cluster.address}}'
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true

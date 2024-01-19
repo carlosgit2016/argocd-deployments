@@ -1,0 +1,34 @@
+## Root application set
+  ## This application set control others in argocd/applicationset
+  ## Useful for new applicationsets and when changes happens to the existent ones
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: root-appset
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+      revision: feat/initial-implementation
+      files:
+      - path: "clusters/config/master/config.yaml"
+  template:
+    metadata:
+      name: '{{.path.basename}}-root'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+          targetRevision: feat/initial-implementation
+          path: argocd/applicationsets
+      destination:
+        server: '{{.cluster.address}}'
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true
+  syncPolicy:
+    preserveResourcesOnDeletion: true

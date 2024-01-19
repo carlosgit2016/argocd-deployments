@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kyverno-appset
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+      revision: feat/initial-implementation
+      files:
+      - path: "clusters/config/master/config.yaml"
+  template:
+    metadata:
+      name: '{{.path.basename}}-kyverno'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+          targetRevision: feat/initial-implementation
+          ref: values
+        - repoURL: https://kyverno.github.io/kyverno
+          targetRevision: 3.1.3
+          chart: kyverno
+          helm:
+            valueFiles: 
+              - $values/overrides/{{.path.basename}}/kyverno/values.yaml
+        - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+          targetRevision: feat/initial-implementation
+          path: defaults/kyverno/manifests
+      destination:
+        server: '{{.cluster.address}}'
+        namespace: kyverno
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
