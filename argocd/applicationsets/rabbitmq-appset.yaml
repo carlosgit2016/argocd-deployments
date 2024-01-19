@@ -9,7 +9,7 @@ spec:
   generators:
   - git:
       repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-      revision: feat/initial-implementation
+      revision: main
       files:
       - path: "clusters/config/alpha/config.yaml"
   template:
@@ -19,14 +19,14 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: feat/initial-implementation
+          targetRevision: main
           path: helm-charts/rabbitmq
           helm:
             releaseName: rabbitmq
             valueFiles:
             - $values/overrides/{{.path.basename}}/rabbitmq/values.yaml
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: feat/initial-implementation
+          targetRevision: main
           ref: values
       destination:
         server: '{{.cluster.address}}'
