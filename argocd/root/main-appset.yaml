@@ -12,7 +12,7 @@ spec:
   generators:
   - git:
       repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-      revision: feat/initial-implementation
+      revision: main
       files:
       - path: "clusters/config/master/config.yaml"
   template:
@@ -22,7 +22,7 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: feat/initial-implementation
+          targetRevision: main
           path: argocd/applicationsets
       destination:
         server: '{{.cluster.address}}'
