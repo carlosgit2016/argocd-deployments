@@ -1,0 +1,16 @@
+services:
+  event-ledger:
+    image: event-ledger:1.0.1
+    build:
+      context: event-ledger/
+    ports:
+      - "3000:80"
+    environment:
+      - GIN_MODE=debug
+    healthcheck:
+      test: ["CMD-SHELL", "wget http://localhost/ping -qO - || exit 1"] # Using wget to avoid installing curl within the container
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 3s
+    

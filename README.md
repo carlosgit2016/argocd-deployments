@@ -1,3 +1,11 @@
+## How to
+
+### How to build a service locally in services/
+
+```bash
+./build.sh # This will build the svc image and load in minikube
+```
+
 ## Throubleshooting
 
 ### Install kyverno to generate argocd secrets clusters

@@ -1,10 +1,7 @@
-## Root application set
-  ## This application set control others in argocd/applicationset
-  ## Useful for new applicationsets and when changes happens to the existent ones
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: root-appset
+  name: event-ledger-appset
   namespace: argocd
 spec:
   goTemplate: true
@@ -14,21 +11,29 @@ spec:
       repoURL: https://github.com/carlosgit2016/argocd-deployments.git
       revision: main
       files:
-      - path: "clusters/config/master/config.yaml"
+      - path: "clusters/config/alpha/config.yaml"
+      - path: "clusters/config/beta/config.yaml"
+      - path: "clusters/config/gamma/config.yaml"
   template:
     metadata:
-      name: '{{.path.basename}}-root'
+      name: '{{.path.basename}}-event-ledger'
     spec:
       project: default
       sources:
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
           targetRevision: feat/event-ledger
-          path: argocd/applicationsets
+          path: helm-charts/microservice
+          helm:
+            releaseName: event-ledger
+
+            valueFiles:
+            - $values/services/event-ledger/values.yaml
+        - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+          targetRevision: feat/event-ledger
+          ref: values
       destination:
         server: '{{.cluster.address}}'
         namespace: default
       syncPolicy:
         automated:
           prune: true
-  syncPolicy:
-    preserveResourcesOnDeletion: true

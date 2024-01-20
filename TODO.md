@@ -7,11 +7,17 @@
 - Create the microservice applicationset - DONE
 - Decorate the microservice override values - 
 - Deploy rabbitmq in the cluster - DONE
-- Control Kyverno through ArgoCD
-- Deploy a new event-ledger microservice with a single HTTP endpoint that basically prints the events in their arrival
+- Control Kyverno through ArgoCD - DONE
+- Deploy a new event-ledger microservice with a single HTTP endpoint that basically prints the events in their arrival - DONE
+  - Print the request body - DONE
+  - Write tests if any - DONE
+  - Create a docker compose file to local development - DONE
+  - Enable debug logs - DONE
 - Write the worker microservice in Golang
   - microservice has to connect to a rabitmq instance
   - for each new message it send to event ledger internal microservice using kube-dns address
+- Deploy event-ledger through ArgoCD
+- Deploy worker through ArgoCD
 - Create a diagram to represent the infrastructure
 - Start writing the article
 
