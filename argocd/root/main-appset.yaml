@@ -22,7 +22,7 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: feat/event-ledger
+          targetRevision: main
           path: argocd/applicationsets
       destination:
         server: '{{.cluster.address}}'
