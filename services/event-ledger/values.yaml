@@ -1,0 +1,68 @@
+nameOverride: event-ledger
+
+image:
+  name: event-ledger
+  tag: 1.0.1
+
+replicas: 2
+
+resources:
+  requests:
+    cpu: 125m
+    memory: 250Mi
+
+environmentVariables:
+  - GIN_MODE: release # turn gin mode into release mode
+
+probe:
+  enabled: true
+
+  startupProbe:
+    httpGet:
+      port: 80
+      path: /ping
+    periodSeconds: 1
+    timeoutSeconds: 3
+    failureThreshold: 2
+    successThreshold: 1
+
+  readinessProbe:
+    httpGet:
+        port: 80
+        httpHeaders:
+        - name: probe
+          value: readiness
+        path: /ping
+    initialDelaySeconds: 1
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+    successThreshold: 1
+
+  livenessProbe:
+    httpGet:
+        port: 80
+        httpHeaders:
+        - name: probe
+          value: liveness
+        path: /ping
+    initialDelaySeconds: 2
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+    successThreshold: 1
+
+configMap:
+  enabled: false
+  propagateToEnv: true
+  data: 
+    DATA: DATA
+
+hpa:
+  enabled: true
+  maxReplicas: 10
+  minReplicas: 1
+  cpu: 80
+
+service:
+  enabled: true

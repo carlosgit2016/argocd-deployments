@@ -37,6 +37,8 @@ spec:
           - containerPort: 80
             name: http
         {{- if .Values.probe.enabled }}
+        startupProbe:
+            {{- toYaml .Values.probe.startupProbe | nindent 10 }}
         livenessProbe:
             {{- toYaml .Values.probe.livenessProbe | nindent 10 }}
         readinessProbe:
