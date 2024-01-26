@@ -15,8 +15,11 @@
   - Enable debug logs - DONE
 - Write the worker microservice in Golang
   - microservice has to connect to a rabitmq instance
+  - It should connect using SSL/TLS if supported instead of user/pass
+  - Log using zap
   - for each new message it send to event ledger internal microservice using kube-dns address
-- Deploy event-ledger through ArgoCD
+- Reutilize the common library ?
+- Deploy event-ledger through ArgoCD - DONE
 - Deploy worker through ArgoCD
 - Create a diagram to represent the infrastructure
 - Start writing the article
