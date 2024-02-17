@@ -16,6 +16,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    volumes:
+      - rabbitmq:/bitnami/rabbitmq/mnesia
     networks:
       - net
   event-ledger:
@@ -52,6 +54,9 @@ services:
       - ENVIRONMENT=development
       - RABBITMQ_USER=user
       - RABBITMQ_HOST=rabbitmq
+      - EVENTLEDGER_URL=event-ledger/register
     networks:
       - net
 
+volumes:
+   rabbitmq:
