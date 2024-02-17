@@ -2,15 +2,15 @@ FROM golang:alpine3.19 as base
 
 WORKDIR /app
 
-COPY . .
+COPY go.mod go.sum ./
+RUN go mod download
 
-# RUN go test ./...
-RUN go install
-RUN go build -o main.go
+COPY *.go ./
+RUN go build -o main
 
-FROM alpine:3.19
+FROM scratch
 
 ENV GIN_MODE release
-COPY --from=base /app/main.go .
+COPY --from=base /app/main /main
 
-CMD [ "./main.go" ]
+CMD [ "/main" ]
