@@ -1,0 +1,21 @@
+name: 'Golang services test and build'
+
+on:
+  pull_request:
+    paths:
+      - "services/"
+  push:
+    paths:
+      - "services/"
+    branches:
+      - "main"
+
+defaults:
+  run:
+    working-directory: services/
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo Initial pipeline
