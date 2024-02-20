@@ -41,7 +41,7 @@ func init() {
 		rabbitMQConnectionString(),
 	)
 	if err != nil {
-		logger.Fatal(fmt.Sprintf("Failed establishing connection with rabbitmq"), zap.String("error", err.Error()))
+		logger.Fatal("Failed establishing connection with rabbitmq", zap.String("error", err.Error()))
 	}
 
 	// Struct validator

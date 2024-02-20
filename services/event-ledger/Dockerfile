@@ -14,7 +14,7 @@ EXPOSE 80
 ENV GIN_MODE release
 
 WORKDIR /app
-COPY --from=build /app/main /app/main
+COPY --from=build /app/main /main
 
 # Security <3
 RUN adduser -D goman && \

@@ -14,9 +14,9 @@
   - Create a docker compose file to local development - DONE
   - Enable debug logs - DONE
 - Write the worker microservice in Golang
-  - microservice has to connect to a rabitmq instance
+  - microservice has to connect to a rabitmq instance - DONE
   - It should connect using SSL/TLS if supported instead of user/pass
-  - Log using zap
+  - Log using zap - DONE
   - for each new message it send to event ledger internal microservice using kube-dns address
 - Reutilize the common library ?
 - Deploy event-ledger through ArgoCD - DONE
