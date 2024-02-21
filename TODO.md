@@ -17,7 +17,9 @@
   - microservice has to connect to a rabitmq instance - DONE
   - It should connect using SSL/TLS if supported instead of user/pass
   - Log using zap - DONE
-  - for each new message it send to event ledger internal microservice using kube-dns address
+  - for each new message it send to event ledger internal microservice using kube-dns address - DONE
+- Create ECR repositories - DONE
+- Configure pipeline to push images to the registries - DONE
 - Reutilize the common library ?
 - Deploy event-ledger through ArgoCD - DONE
 - Deploy worker through ArgoCD
