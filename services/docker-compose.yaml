@@ -1,16 +1,62 @@
+networks:
+  net: {}
+
 services:
+  rabbitmq:
+    image: bitnami/rabbitmq:3.12.12-debian-11-r0
+    environment:
+      RABBITMQ_USERNAME: user
+      RABBITMQ_PASSWORD: bitnami
+      RABBITMQ_MANAGEMENT_ALLOW_WEB_ACCESS: true
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:15672 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - rabbitmq:/bitnami/rabbitmq/mnesia
+    networks:
+      - net
   event-ledger:
-    image: event-ledger:1.0.1
+    image: event-ledger:1.0.2
     build:
       context: event-ledger/
     ports:
       - "3000:80"
     environment:
       - GIN_MODE=debug
+      - ENVIRONMENT=development
     healthcheck:
       test: ["CMD-SHELL", "wget http://localhost/ping -qO - || exit 1"] # Using wget to avoid installing curl within the container
       interval: 10s
       timeout: 5s
       retries: 2
       start_period: 3s
-    
+    networks:
+      - net
+  worker:
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    image: worker:1.0.1
+    healthcheck:
+      # test: ["CMD-SHELL", "netstat -tpn | egrep \"ESTABLISHED\" || exit 1"] will not work unless we install netstat inside the scratch image 
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    build:
+      context: worker/
+    environment:
+      - GIN_MODE=debug
+      - ENVIRONMENT=development
+      - RABBITMQ_USER=user
+      - RABBITMQ_HOST=rabbitmq
+      - EVENTLEDGER_URL=event-ledger/register
+    networks:
+      - net
+
+volumes:
+   rabbitmq:

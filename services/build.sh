@@ -6,3 +6,4 @@ set -e
 
 docker compose build
 minikube image load --overwrite=true "$(yq '.services.event-ledger.image' docker-compose.yaml)" # Load event-ledger image
+minikube image load --overwrite=true "$(yq '.services.worker.image' docker-compose.yaml)" # Load worker image
