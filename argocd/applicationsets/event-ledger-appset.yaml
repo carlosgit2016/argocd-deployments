@@ -21,7 +21,7 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: main
+          targetRevision: feat/workload-deployment
           path: helm-charts/microservice
           helm:
             releaseName: event-ledger
@@ -29,7 +29,7 @@ spec:
             valueFiles:
             - $values/services/event-ledger/values.yaml
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: main
+          targetRevision: feat/workload-deployment
           ref: values
       destination:
         server: '{{.cluster.address}}'

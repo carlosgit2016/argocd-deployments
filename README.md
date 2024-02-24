@@ -1,3 +1,18 @@
+## Getting started
+
+### Pre-requisites
+- minikube
+- vcluster CLI
+- Linux terminal
+
+
+### Start minikube and scaffold
+```bash
+minikube start
+cd helper-scripts
+./scaffold.sh ## Will install argocd and create 3 clusters (alpha, beta and gamma)
+```
+
 ## How to
 
 ### How to build a service locally in services/

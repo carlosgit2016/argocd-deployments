@@ -20,11 +20,19 @@
   - for each new message it send to event ledger internal microservice using kube-dns address - DONE
 - Create ECR repositories - DONE
 - Configure pipeline to push images to the registries - DONE
-- Reutilize the common library ?
 - Deploy event-ledger through ArgoCD - DONE
 - Deploy worker through ArgoCD
 - Create a diagram to represent the infrastructure
 - Start writing the article
 
+### Additional
+- Set policy to delete ECR images
+- Set tag to be created based on conventional commits
+- Set cache for docker build
+- Reutilize the common library
+- Figure out why builds to main do not trigger the pipeline
+- Figure out why ECR registry image is with empty layers
+
 ## Challenge
+
 - 
