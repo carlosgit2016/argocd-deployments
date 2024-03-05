@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: aws-token-refresher-appset
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+      revision: main
+      files:
+      - path: "clusters/config/alpha/config.yaml"
+      - path: "clusters/config/beta/config.yaml"
+      - path: "clusters/config/gamma/config.yaml"
+  template:
+    metadata:
+      name: '{{.path.basename}}-aws-token-refresher'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
+          targetRevision: feat/workload-deployment
+          ref: services/aws-token-refresher/manifests
+      destination:
+        server: '{{.cluster.address}}'
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true

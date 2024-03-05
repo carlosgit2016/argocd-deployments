@@ -4,24 +4,20 @@ locals {
   }
 }
 
-resource "aws_ecr_repository" "worker" {
-  name                 = "worker"
+resource "aws_ecr_repository" "repo" {
+
+  for_each = toset(["worker", "event-ledger", "aws-token-refresher"])
+
+  name                 = each.value
   image_tag_mutability = "MUTABLE"
+  force_delete         = var.ecr_force_delete
 
   image_scanning_configuration {
     scan_on_push = true
   }
 
-  tags = local.tags
-
-}
-
-resource "aws_ecr_repository" "event-ledger" {
-  name                 = "event-ledger"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
+  lifecycle {
+    create_before_destroy = false
   }
 
   tags = local.tags
