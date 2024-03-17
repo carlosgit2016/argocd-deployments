@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: event-ledger-appset
+  name: aws-token-refresher-appset
   namespace: argocd
 spec:
   goTemplate: true
@@ -16,21 +16,13 @@ spec:
       - path: "clusters/config/gamma/config.yaml"
   template:
     metadata:
-      name: '{{.path.basename}}-event-ledger'
+      name: '{{.path.basename}}-aws-token-refresher'
     spec:
       project: default
       sources:
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
           targetRevision: feat/workload-deployment
-          path: helm-charts/microservice
-          helm:
-            releaseName: event-ledger
-
-            valueFiles:
-            - $values/services/event-ledger/values.yaml
-        - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: feat/workload-deployment
-          ref: values
+          ref: services/aws-token-refresher/manifests
       destination:
         server: '{{.cluster.address}}'
         namespace: default

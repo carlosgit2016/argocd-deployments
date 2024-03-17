@@ -1,0 +1,16 @@
+replicas: 3
+
+configMap:
+  enabled: true
+  propagateToEnv: true
+  data:
+    RABBITMQ_HOST: "rabbitmq.vcluster-alpha"
+    RABBITMQ_PORT: "5672"
+    RABBITMQ_VHOST: "/"
+
+hpa:
+  enabled: false
+
+image:
+  name: 169740125934.dkr.ecr.us-east-1.amazonaws.com/worker
+  tag: ce2b18b

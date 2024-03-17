@@ -22,7 +22,7 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: main
+          targetRevision: feat/workload-deployment
           path: argocd/applicationsets
       destination:
         server: '{{.cluster.address}}'

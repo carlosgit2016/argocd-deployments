@@ -5,10 +5,10 @@ resource "aws_iam_openid_connect_provider" "gh-idp" {
   url            = "https://token.actions.githubusercontent.com"
   client_id_list = ["sts.amazonaws.com"]
   # https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
-  thumbprint_list = ["959CB2B52B4AD201A593847ABCA32FF48F838C2E"]
+  thumbprint_list = ["959cb2b52b4ad201a593847abca32ff48f838c2e"]
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -37,7 +37,7 @@ resource "aws_iam_role" "gh-actions" {
   })
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -64,6 +64,6 @@ resource "aws_iam_role_policy_attachment" "AdministratorAccess" {
   policy_arn = aws_iam_policy.ECRAccess.arn
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }

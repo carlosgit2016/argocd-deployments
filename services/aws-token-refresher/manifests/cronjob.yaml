@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aws-token-refresher-svcacc
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: secret-manager
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - delete
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: aws-token-refresher-secret-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: secret-manager
+subjects:
+- kind: ServiceAccount
+  name: aws-token-refresher-svcacc
+  namespace: default
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: aws-token-refresher
+spec:
+  jobTemplate:
+    metadata:
+      name: aws-token-refresher
+    spec:
+      template:
+        metadata:
+          name: aws-token-refresher
+        spec:
+          containers:
+          - image: 169740125934.dkr.ecr.us-east-1.amazonaws.com/aws-token-refresher:d54053c	
+            name: aws-token-refresher
+            resources: 
+              requests:
+                cpu: 10m
+                memory: 50Mi
+          restartPolicy: OnFailure
+          serviceAccount: aws-token-refresher-svcacc
+          imagePullSecrets:
+            - name: aws-ecr
+  schedule: 0 */8 * * *

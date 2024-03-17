@@ -21,15 +21,16 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: main
+          targetRevision: feat/workload-deployment
           path: helm-charts/microservice
           helm:
             releaseName: worker
 
             valueFiles:
-            - $values/overrides/{{.path.basename}}/worker/values.yaml
+            - $values/defaults/worker/values.yaml
+            - $values/services/worker/{{.path.basename}}-values.yaml # last override
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: main
+          targetRevision: feat/workload-deployment
           ref: values
       destination:
         server: '{{.cluster.address}}'

@@ -19,14 +19,14 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: main
+          targetRevision: feat/workload-deployment
           path: helm-charts/rabbitmq
           helm:
             releaseName: rabbitmq
             valueFiles:
             - $values/overrides/{{.path.basename}}/rabbitmq/values.yaml
         - repoURL: https://github.com/carlosgit2016/argocd-deployments.git
-          targetRevision: main
+          targetRevision: feat/workload-deployment
           ref: values
       destination:
         server: '{{.cluster.address}}'
