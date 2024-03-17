@@ -6,7 +6,7 @@ locals {
 
 resource "aws_ecr_repository" "repo" {
 
-  for_each = toset(["worker", "event-ledger", "aws-token-refresher"])
+  for_each = toset(var.ecr_repos)
 
   name                 = each.value
   image_tag_mutability = "MUTABLE"
