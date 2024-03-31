@@ -1,0 +1,32 @@
+name: 'Ephemeral resources management'
+
+on:
+    workflow_dispatch:
+        inputs:
+            action:
+                description: 'Ephemeral resources action'
+                required: true
+                default: 'create'
+                type: choice
+                options:
+                    - destroy
+                    - plan
+                    - apply
+
+permissions:
+    id-token: write
+    contents: read
+
+jobs:
+  plan-ephemeral:
+    uses: carlosgit2016/reusable-workflows/.github/workflows/terraform.yaml@main
+    with:
+      validate: true
+      pr: false # Will comment in the PR
+      fmt-check: false # Will check the .tf files format and fail in case of any format issues
+      plan: ${{ inputs.action == 'plan' }}
+      apply: ${{ inputs.action == 'apply' }}
+      destroy: ${{ inputs.action == 'destroy' }}
+      workspace: ephemeral # Workspace to be used, it will create in case do not exists 
+      working-dir: infrastructure # Workdir where the resources are in 
+      role-to-assume: arn:aws:iam::169740125934:role/gh-actions-role # AWS Role to be assumed
