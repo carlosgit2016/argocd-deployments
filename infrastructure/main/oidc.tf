@@ -7,9 +7,6 @@ resource "aws_iam_openid_connect_provider" "gh-idp" {
   # https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
   thumbprint_list = ["959cb2b52b4ad201a593847abca32ff48f838c2e"]
 
-  lifecycle {
-    #prevent_destroy = true
-  }
 }
 
 # IAM Role that GitHub Workflows can assume through sts:AssumeRoleWithWebIdentity.
@@ -36,9 +33,6 @@ resource "aws_iam_role" "gh-actions" {
     }]
   })
 
-  lifecycle {
-    #prevent_destroy = true
-  }
 }
 
 resource "aws_iam_policy" "ECRAccess" {
@@ -59,11 +53,13 @@ resource "aws_iam_policy" "ECRAccess" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "AdministratorAccess" {
+resource "aws_iam_role_policy_attachment" "ecr_access_attch" {
   role       = aws_iam_role.gh-actions.name
   policy_arn = aws_iam_policy.ECRAccess.arn
-
-  lifecycle {
-    #prevent_destroy = true
-  }
 }
+
+resource "aws_iam_role_policy_attachment" "admin_access_attch" {
+  role       = aws_iam_role.gh-actions.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
