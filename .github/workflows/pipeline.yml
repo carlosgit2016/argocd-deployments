@@ -2,8 +2,8 @@ name: 'Golang services test, build and push'
 
 on:
   pull_request:
-    # paths:
-    #   - "services/"
+    paths:
+      - "services/"
   push:
     paths:
       - "services/"
